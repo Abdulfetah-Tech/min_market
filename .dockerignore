@@ -1,0 +1,33 @@
+# Flutter SDK installed locally; the image provides the build SDK
+/flutter
+flutter
+**/flutter/**
+
+# Version control and local editor files
+.git
+.gitignore
+.idea
+.vscode
+
+# Flutter/Dart caches and generated output
+.dart_tool
+.pub-cache
+.pub
+build
+coverage
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# Native targets are not needed for a web build
+android
+ios
+linux
+macos
+windows
+
+# Generated project files and build artifacts
+*.iml
+
+# OS and log files
+.DS_Store
+*.log

@@ -1,24 +1,26 @@
+// Router configuration using go_router
+
 import 'package:go_router/go_router.dart';
-import 'package:min_market/models/product.dart';
-import 'package:min_market/screens/cart_screen.dart';
-import 'package:min_market/screens/home_screen.dart';
-import 'package:min_market/screens/product_detail_screen.dart';
-import 'package:min_market/screens/product_form_screen.dart';
+
+import 'features/products/domain/entities/product.dart';
+import 'features/products/presentation/screens/home_screen.dart';
+import 'features/products/presentation/screens/product_detail_screen.dart';
+import 'features/products/presentation/screens/product_form_screen.dart';
+import 'features/cart/presentation/screens/cart_screen.dart';
 
 final GoRouter routes = GoRouter(
   initialLocation: '/',
   routes: [
-    GoRoute(path: '/', builder: (context, state) => HomeScreen()),
-    GoRoute(path: '/cart', builder: (context, state) => CartScreen()),
+    GoRoute(path: '/', builder: (context, state) => const HomeScreen()),
+    GoRoute(path: '/cart', builder: (context, state) => const CartScreen()),
     GoRoute(
       path: '/product/new',
-      builder: (context, state) => ProductFormScreen(),
+      builder: (context, state) => const ProductFormScreen(),
     ),
     GoRoute(
       path: '/product/:id/edit',
       builder: (context, state) {
         final product = state.extra as Product;
-
         return ProductFormScreen(product: product);
       },
     ),
@@ -26,7 +28,6 @@ final GoRouter routes = GoRouter(
       path: '/product/:id',
       builder: (context, state) {
         final String id = state.pathParameters['id']!;
-
         return ProductDetailScreen(productId: id);
       },
     ),
