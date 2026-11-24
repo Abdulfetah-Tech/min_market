@@ -4,16 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:min_market/core/core.dart';
-import 'package:min_market/features/products/domain/entities/product.dart';
-import 'package:min_market/features/products/presentation/bloc/products_bloc.dart';
-import 'package:min_market/features/products/presentation/bloc/products_event.dart';
-import 'package:min_market/features/products/presentation/bloc/products_state.dart';
+import '../../../../core/core.dart';
+import '../../domain/entities/product.dart';
+import '../bloc/products_bloc.dart';
+import '../bloc/products_event.dart';
+import '../bloc/products_state.dart';
 
 class ProductFormScreen extends StatefulWidget {
-  final Product? product;
 
   const ProductFormScreen({super.key, this.product});
+  final Product? product;
 
   @override
   State<ProductFormScreen> createState() => _ProductFormScreenState();
@@ -138,8 +138,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return BlocListener<ProductsBloc, ProductsState>(
+  Widget build(BuildContext context) => BlocListener<ProductsBloc, ProductsState>(
       listener: (context, state) {
         if (state is ProductActionSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -187,7 +186,6 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                         controller: _titleController,
                         hint: 'Desk lamp',
                         validator: _validateTitle,
-                        textInputAction: TextInputAction.next,
                       ),
                       const SizedBox(height: 16),
 
@@ -197,7 +195,6 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                         hint: '0.00',
                         keyboardType: const TextInputType.numberWithOptions(decimal: true),
                         validator: _validatePrice,
-                        textInputAction: TextInputAction.next,
                       ),
                       const SizedBox(height: 16),
 
@@ -224,7 +221,6 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                         hint: 'Short description',
                         maxLines: 3,
                         validator: _validateDescription,
-                        textInputAction: TextInputAction.next,
                       ),
                       const SizedBox(height: 16),
 
@@ -247,7 +243,6 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                       final isLoading = state is ProductActionLoading;
                       return AppButton(
                         onPressed: isLoading ? null : _save,
-                        variant: AppButtonVariant.primary,
                         size: AppButtonSize.large,
                         isLoading: isLoading,
                         child: Text(
@@ -267,7 +262,6 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
         ),
       ),
     );
-  }
 }
 
 class _FieldLabel extends StatelessWidget {
@@ -276,10 +270,8 @@ class _FieldLabel extends StatelessWidget {
   final String text;
 
   @override
-  Widget build(BuildContext context) {
-    return Padding(
+  Widget build(BuildContext context) => Padding(
       padding: const EdgeInsets.only(bottom: 6),
       child: Text(text, style: const TextStyle(color: Colors.grey)),
     );
-  }
 }

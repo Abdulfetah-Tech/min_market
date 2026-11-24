@@ -9,13 +9,13 @@ import 'package:intl/intl.dart';
 class CurrencyFormatter {
   static final NumberFormat _usdFormat = NumberFormat.currency(
     locale: 'en_US',
-    symbol: '\$',
+    symbol: r'$',
     decimalDigits: 2,
   );
 
   static final NumberFormat _compactFormat = NumberFormat.compactCurrency(
     locale: 'en_US',
-    symbol: '\$',
+    symbol: r'$',
     decimalDigits: 0,
   );
 
@@ -137,10 +137,10 @@ class Validators {
 
 /// Debouncer for search/input handling
 class Debouncer {
-  final Duration delay;
-  Timer? _timer;
 
   Debouncer({required this.delay});
+  final Duration delay;
+  Timer? _timer;
 
   void run(VoidCallback action) {
     _timer?.cancel();

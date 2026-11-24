@@ -6,11 +6,11 @@ import '../models/product.dart';
 import 'market_store.dart';
 
 class ProductDataProvider {
+
+  ProductDataProvider({http.Client? client}) : _client = client ?? http.Client();
   static const String baseUrl = 'https://dummyjson.com/products';
   final http.Client _client;
   final List<Product> _localProducts = [];
-
-  ProductDataProvider({http.Client? client}) : _client = client ?? http.Client();
 
   Future<List<Product>> getProducts() async {
     try {

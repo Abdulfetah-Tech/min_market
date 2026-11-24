@@ -6,10 +6,6 @@ import 'package:fpdart/fpdart.dart';
 
 // Base failure class
 abstract class Failure extends Equatable {
-  final String message;
-  final String? code;
-  final dynamic originalError;
-  final StackTrace? stackTrace;
 
   const Failure({
     required this.message,
@@ -17,6 +13,10 @@ abstract class Failure extends Equatable {
     this.originalError,
     this.stackTrace,
   });
+  final String message;
+  final String? code;
+  final dynamic originalError;
+  final StackTrace? stackTrace;
 
   @override
   List<Object?> get props => [message, code, originalError];
@@ -52,7 +52,6 @@ class NoConnectionFailure extends Failure {
 
 // Server related failures
 class ServerFailure extends Failure {
-  final int statusCode;
 
   const ServerFailure({
     required super.message,
@@ -61,6 +60,7 @@ class ServerFailure extends Failure {
     super.originalError,
     super.stackTrace,
   });
+  final int statusCode;
 
   @override
   List<Object?> get props => [...super.props, statusCode];
@@ -108,7 +108,6 @@ class CacheFailure extends Failure {
 
 // Validation failures
 class ValidationFailure extends Failure {
-  final Map<String, String> fieldErrors;
 
   const ValidationFailure({
     required super.message,
@@ -117,6 +116,7 @@ class ValidationFailure extends Failure {
     super.originalError,
     super.stackTrace,
   });
+  final Map<String, String> fieldErrors;
 
   @override
   List<Object?> get props => [...super.props, fieldErrors];
@@ -137,16 +137,12 @@ typedef Result<T> = Either<Failure, T>;
 
 // Extension for easier Result handling
 extension ResultX<T> on Result<T> {
-  T getOrElse(T Function(Failure) onFailure) {
-    return fold(onFailure, (t) => t);
-  }
+  T getOrElse(T Function(Failure) onFailure) => fold(onFailure, (t) => t);
 
-  T getOrThrow() {
-    return fold(
+  T getOrThrow() => fold(
       (failure) => throw failure,
       (t) => t,
     );
-  }
 
   bool get isSuccess => isRight();
   bool get isFailure => isLeft();

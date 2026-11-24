@@ -1,16 +1,14 @@
 // Product card widget
 
-import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
 
-import 'package:min_market/core/core.dart';
-import 'package:min_market/features/products/domain/entities/product.dart';
+import '../../../../core/core.dart';
+import '../../domain/entities/product.dart';
 
 class ProductCard extends StatelessWidget {
   const ProductCard({
-    super.key,
-    required this.product,
-    required this.onTap,
+    required this.product, required this.onTap, super.key,
   });
 
   final Product product;

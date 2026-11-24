@@ -3,9 +3,10 @@
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:min_market/core/core.dart';
+import '../../core/core.dart';
 import 'data/products_data.dart';
 import 'domain/products_domain.dart';
+import 'presentation/bloc/products_bloc.dart';
 
 final GetIt sl = GetIt.instance;
 
@@ -54,5 +55,18 @@ void registerProductsDependencies() {
 
   sl.registerLazySingleton<GetProductsByCategoryUseCase>(
     () => GetProductsByCategoryUseCase(sl<ProductRepository>()),
+  );
+
+  // BLoC
+  sl.registerLazySingleton<ProductsBloc>(
+    () => ProductsBloc(
+      getProductsUseCase: sl<GetProductsUseCase>(),
+      getProductUseCase: sl<GetProductUseCase>(),
+      createProductUseCase: sl<CreateProductUseCase>(),
+      updateProductUseCase: sl<UpdateProductUseCase>(),
+      deleteProductUseCase: sl<DeleteProductUseCase>(),
+      searchProductsUseCase: sl<SearchProductsUseCase>(),
+      getProductsByCategoryUseCase: sl<GetProductsByCategoryUseCase>(),
+    ),
   );
 }

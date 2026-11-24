@@ -5,9 +5,7 @@ import 'package:flutter/services.dart';
 
 class AppButton extends StatelessWidget {
   const AppButton({
-    super.key,
-    required this.onPressed,
-    required this.child,
+    required this.onPressed, required this.child, super.key,
     this.variant = AppButtonVariant.primary,
     this.size = AppButtonSize.medium,
     this.isLoading = false,
@@ -44,7 +42,7 @@ class AppButton extends StatelessWidget {
             onPressed!();
           };
 
-    Widget buttonChild = Row(
+    final Widget buttonChild = Row(
       mainAxisSize: fullWidth ? MainAxisSize.max : MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -135,7 +133,7 @@ class AppButton extends StatelessWidget {
 
     if (tooltip != null) {
       return Tooltip(
-        message: tooltip!,
+        message: tooltip,
         child: Semantics(
           label: semanticLabel,
           button: true,
@@ -228,9 +226,7 @@ enum IconAlignment { start, end }
 /// Icon button with consistent styling
 class AppIconButton extends StatelessWidget {
   const AppIconButton({
-    super.key,
-    required this.onPressed,
-    required this.icon,
+    required this.onPressed, required this.icon, super.key,
     this.size = AppButtonSize.medium,
     this.variant = AppButtonVariant.outline,
     this.tooltip,
@@ -263,17 +259,14 @@ class AppIconButton extends StatelessWidget {
         dimension = 36;
         padding = EdgeInsets.zero;
         radius = 8;
-        break;
       case AppButtonSize.medium:
         dimension = 48;
         padding = EdgeInsets.zero;
         radius = 12;
-        break;
       case AppButtonSize.large:
         dimension = 56;
         padding = EdgeInsets.zero;
         radius = 16;
-        break;
     }
 
     Widget button = switch (variant) {
@@ -350,7 +343,7 @@ class AppIconButton extends StatelessWidget {
 
     if (tooltip != null) {
       return Tooltip(
-        message: tooltip!,
+        message: tooltip,
         child: Semantics(
           label: semanticLabel,
           button: true,

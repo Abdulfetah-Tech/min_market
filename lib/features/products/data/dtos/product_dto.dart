@@ -18,8 +18,7 @@ class ProductDto {
     this.updatedAt,
   });
 
-  factory ProductDto.fromJson(Map<String, dynamic> json) {
-    return ProductDto(
+  factory ProductDto.fromJson(Map<String, dynamic> json) => ProductDto(
       id: json['id'],
       title: json['title'] as String,
       price: (json['price'] as num).toDouble(),
@@ -32,7 +31,6 @@ class ProductDto {
       createdAt: json['createdAt'] as String?,
       updatedAt: json['updatedAt'] as String?,
     );
-  }
 
   final dynamic id; // Can be int or String from API
   final String title;
@@ -46,8 +44,7 @@ class ProductDto {
   final String? createdAt;
   final String? updatedAt;
 
-  Map<String, dynamic> toJson() {
-    return {
+  Map<String, dynamic> toJson() => {
       'id': id,
       'title': title,
       'price': price,
@@ -60,7 +57,6 @@ class ProductDto {
       'createdAt': createdAt,
       'updatedAt': updatedAt,
     };
-  }
 }
 
 @JsonSerializable()
@@ -72,8 +68,7 @@ class ProductsResponseDto {
     this.limit = 0,
   });
 
-  factory ProductsResponseDto.fromJson(Map<String, dynamic> json) {
-    return ProductsResponseDto(
+  factory ProductsResponseDto.fromJson(Map<String, dynamic> json) => ProductsResponseDto(
       products: (json['products'] as List<dynamic>)
           .map((e) => ProductDto.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -81,21 +76,18 @@ class ProductsResponseDto {
       skip: json['skip'] as int? ?? 0,
       limit: json['limit'] as int? ?? 0,
     );
-  }
 
   final List<ProductDto> products;
   final int total;
   final int skip;
   final int limit;
 
-  Map<String, dynamic> toJson() {
-    return {
+  Map<String, dynamic> toJson() => {
       'products': products.map((e) => e.toJson()).toList(),
       'total': total,
       'skip': skip,
       'limit': limit,
     };
-  }
 }
 
 @JsonSerializable()
@@ -108,15 +100,13 @@ class ProductCreateDto {
     this.imageUrl,
   });
 
-  factory ProductCreateDto.fromJson(Map<String, dynamic> json) {
-    return ProductCreateDto(
+  factory ProductCreateDto.fromJson(Map<String, dynamic> json) => ProductCreateDto(
       title: json['title'] as String,
       price: (json['price'] as num).toDouble(),
       category: json['category'] as String,
       description: json['description'] as String,
       imageUrl: json['imageUrl'] as String?,
     );
-  }
 
   final String title;
   final num price;
@@ -124,13 +114,11 @@ class ProductCreateDto {
   final String description;
   final String? imageUrl;
 
-  Map<String, dynamic> toJson() {
-    return {
+  Map<String, dynamic> toJson() => {
       'title': title,
       'price': price,
       'category': category,
       'description': description,
       'imageUrl': imageUrl,
     };
-  }
 }

@@ -1,18 +1,12 @@
 // Cart BLoC
 
 import 'package:bloc/bloc.dart';
-import 'package:fpdart/fpdart.dart';
 
 import '../../domain/usecases/cart_usecases.dart';
 import 'cart_event.dart';
 import 'cart_state.dart';
 
 class CartBloc extends Bloc<CartEvent, CartState> {
-  final GetCartUseCase _getCartUseCase;
-  final AddToCartUseCase _addToCartUseCase;
-  final UpdateCartQuantityUseCase _updateQuantityUseCase;
-  final RemoveFromCartUseCase _removeFromCartUseCase;
-  final ClearCartUseCase _clearCartUseCase;
 
   CartBloc({
     required GetCartUseCase getCartUseCase,
@@ -32,6 +26,11 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     on<RemoveFromCartEvent>(_onRemoveFromCart);
     on<ClearCartEvent>(_onClearCart);
   }
+  final GetCartUseCase _getCartUseCase;
+  final AddToCartUseCase _addToCartUseCase;
+  final UpdateCartQuantityUseCase _updateQuantityUseCase;
+  final RemoveFromCartUseCase _removeFromCartUseCase;
+  final ClearCartUseCase _clearCartUseCase;
 
   Future<void> _onLoadCart(
     LoadCartEvent event,

@@ -4,7 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:min_market/core/error/failures.dart';
+import '../error/failures.dart';
 
 /// Keys for secure storage
 class SecureStorageKeys {
@@ -35,7 +35,6 @@ class SecureStorage {
     iOptions: IOSOptions(
       accessibility: KeychainAccessibility.first_unlock_this_device,
     ),
-    wOptions: WindowsOptions(),
   );
 
   static Future<Result<void>> write(String key, String value) async {
@@ -135,9 +134,7 @@ class AppPreferences {
     }
   }
 
-  static String? getString(String key) {
-    return _instance.getString(key);
-  }
+  static String? getString(String key) => _instance.getString(key);
 
   // Bool operations
   static Future<Result<void>> setBool(String key, bool value) async {
@@ -153,9 +150,7 @@ class AppPreferences {
     }
   }
 
-  static bool getBool(String key, {bool defaultValue = false}) {
-    return _instance.getBool(key) ?? defaultValue;
-  }
+  static bool getBool(String key, {bool defaultValue = false}) => _instance.getBool(key) ?? defaultValue;
 
   // Int operations
   static Future<Result<void>> setInt(String key, int value) async {
@@ -171,9 +166,7 @@ class AppPreferences {
     }
   }
 
-  static int getInt(String key, {int defaultValue = 0}) {
-    return _instance.getInt(key) ?? defaultValue;
-  }
+  static int getInt(String key, {int defaultValue = 0}) => _instance.getInt(key) ?? defaultValue;
 
   // Double operations
   static Future<Result<void>> setDouble(String key, double value) async {
@@ -189,9 +182,7 @@ class AppPreferences {
     }
   }
 
-  static double getDouble(String key, {double defaultValue = 0.0}) {
-    return _instance.getDouble(key) ?? defaultValue;
-  }
+  static double getDouble(String key, {double defaultValue = 0.0}) => _instance.getDouble(key) ?? defaultValue;
 
   // String list operations
   static Future<Result<void>> setStringList(String key, List<String> value) async {
@@ -207,9 +198,7 @@ class AppPreferences {
     }
   }
 
-  static List<String> getStringList(String key) {
-    return _instance.getStringList(key) ?? [];
-  }
+  static List<String> getStringList(String key) => _instance.getStringList(key) ?? [];
 
   // Remove operations
   static Future<Result<void>> remove(String key) async {
@@ -238,13 +227,9 @@ class AppPreferences {
     }
   }
 
-  static bool containsKey(String key) {
-    return _instance.containsKey(key);
-  }
+  static bool containsKey(String key) => _instance.containsKey(key);
 
-  static Set<String> getKeys() {
-    return _instance.getKeys();
-  }
+  static Set<String> getKeys() => _instance.getKeys();
 }
 
 /// JSON storage helper for complex objects

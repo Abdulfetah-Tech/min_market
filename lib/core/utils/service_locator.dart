@@ -7,7 +7,6 @@ import 'package:talker_flutter/talker_flutter.dart';
 
 import '../config/environment.dart';
 import '../network/api_client.dart';
-import '../storage/local_storage.dart';
 import 'bloc_observer.dart';
 
 final GetIt sl = GetIt.instance;

@@ -9,14 +9,10 @@ import 'package:fpdart/fpdart.dart';
 import 'package:talker_dio_logger/talker_dio_logger.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
-import 'package:min_market/core/config/environment.dart';
-import 'package:min_market/core/error/failures.dart';
+import '../config/environment.dart';
+import '../error/failures.dart';
 
 class ApiClient {
-  late final Dio _dio;
-  final Talker _talker;
-  final Connectivity _connectivity;
-  bool _isRefreshing = false;
 
   ApiClient({
     required Talker talker,
@@ -26,6 +22,10 @@ class ApiClient {
     _initializeDio();
     _setupConnectivityListener();
   }
+  late final Dio _dio;
+  final Talker _talker;
+  final Connectivity _connectivity;
+  final bool _isRefreshing = false;
 
   void _initializeDio() {
     _dio = Dio(
@@ -50,17 +50,16 @@ class ApiClient {
           Duration(seconds: 2),
           Duration(seconds: 4),
         ],
-        retryEvaluator: (e) => _shouldRetry(e),
+        retryEvaluator: _shouldRetry,
       ),
-      // Logging interceptor
+      // Logging interceptor - disable response data printing to avoid buffer issues
       if (AppConfig.enableLogging)
         TalkerDioLogger(
           talker: _talker,
-          settings: TalkerDioLoggerSettings(
+          settings: const TalkerDioLoggerSettings(
             printRequestHeaders: true,
             printResponseHeaders: true,
-            printRequestData: true,
-            printResponseData: true,
+            printResponseData: false, // Disable to avoid large output buffering
           ),
         ),
       // Auth interceptor (placeholder for future token handling)
@@ -91,21 +90,22 @@ class ApiClient {
 
   Future<Result<T>> get<T>(
     String path, {
-    Map<String, dynamic>? queryParameters,
+    required T Function(dynamic) parser, Map<String, dynamic>? queryParameters,
     Options? options,
-    required T Function(dynamic) parser,
   }) async {
     if (!await _hasConnection()) {
       return Left<Failure, T>(const NoConnectionFailure());
     }
 
     try {
-      final response = await _dio.get<T>(
+      // Use dynamic to avoid any generic type issues with Dio
+      final response = await _dio.get(
         path,
         queryParameters: queryParameters,
         options: options,
       );
-      return Right<Failure, T>(parser(response.data));
+      final parsed = parser(response.data);
+      return Right<Failure, T>(parsed);
     } on DioException catch (e, stackTrace) {
       return Left<Failure, T>(_mapDioException(e, stackTrace));
     } catch (e, stackTrace) {
@@ -119,17 +119,16 @@ class ApiClient {
 
   Future<Result<T>> post<T>(
     String path, {
-    dynamic data,
+    required T Function(dynamic) parser, dynamic data,
     Map<String, dynamic>? queryParameters,
     Options? options,
-    required T Function(dynamic) parser,
   }) async {
     if (!await _hasConnection()) {
       return Left<Failure, T>(const NoConnectionFailure());
     }
 
     try {
-      final response = await _dio.post<T>(
+      final response = await _dio.post(
         path,
         data: data,
         queryParameters: queryParameters,
@@ -149,17 +148,16 @@ class ApiClient {
 
   Future<Result<T>> put<T>(
     String path, {
-    dynamic data,
+    required T Function(dynamic) parser, dynamic data,
     Map<String, dynamic>? queryParameters,
     Options? options,
-    required T Function(dynamic) parser,
   }) async {
     if (!await _hasConnection()) {
       return Left<Failure, T>(const NoConnectionFailure());
     }
 
     try {
-      final response = await _dio.put<T>(
+      final response = await _dio.put(
         path,
         data: data,
         queryParameters: queryParameters,
@@ -184,7 +182,7 @@ class ApiClient {
     Options? options,
   }) async {
     if (!await _hasConnection()) {
-      return Left<Failure, void>(const NoConnectionFailure());
+      return const Left<Failure, void>(NoConnectionFailure());
     }
 
     try {
@@ -299,18 +297,18 @@ class ApiClient {
 
 // Retry interceptor with exponential backoff
 class RetryInterceptor extends Interceptor {
-  final int retries;
-  final List<Duration> retryDelays;
-  final bool Function(DioException) retryEvaluator;
 
   RetryInterceptor({
     required this.retries,
     required this.retryDelays,
     required this.retryEvaluator,
   });
+  final int retries;
+  final List<Duration> retryDelays;
+  final bool Function(DioException) retryEvaluator;
 
   @override
-  void onError(DioException err, ErrorInterceptorHandler handler) async {
+  Future<void> onError(DioException err, ErrorInterceptorHandler handler) async {
     final options = err.requestOptions;
     final retryCount = options.extra['retryCount'] as int? ?? 0;
 
@@ -362,9 +360,9 @@ class _AuthInterceptor extends Interceptor {
 
 // Error interceptor for consistent error handling
 class _ErrorInterceptor extends Interceptor {
-  final Talker _talker;
 
   _ErrorInterceptor({required Talker talker}) : _talker = talker;
+  final Talker _talker;
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {

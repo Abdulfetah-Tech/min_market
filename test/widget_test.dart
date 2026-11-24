@@ -1,20 +1,18 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:bloc_test/bloc_test.dart';
-import 'package:mocktail/mocktail.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:min_market/features/products/domain/entities/product.dart';
-import 'package:min_market/features/products/domain/usecases/product_usecases.dart';
-import 'package:min_market/features/products/presentation/bloc/products_bloc.dart';
-import 'package:min_market/features/products/presentation/bloc/products_event.dart';
-import 'package:min_market/features/products/presentation/bloc/products_state.dart';
+import 'package:min_market/core/config/environment.dart';
 import 'package:min_market/features/cart/domain/entities/cart.dart';
 import 'package:min_market/features/cart/domain/usecases/cart_usecases.dart';
 import 'package:min_market/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:min_market/features/cart/presentation/bloc/cart_event.dart';
 import 'package:min_market/features/cart/presentation/bloc/cart_state.dart';
-import 'package:min_market/core/config/environment.dart';
+import 'package:min_market/features/products/domain/entities/product.dart';
+import 'package:min_market/features/products/domain/usecases/product_usecases.dart';
+import 'package:min_market/features/products/presentation/bloc/products_bloc.dart';
+import 'package:min_market/features/products/presentation/bloc/products_event.dart';
+import 'package:min_market/features/products/presentation/bloc/products_state.dart';
+import 'package:mocktail/mocktail.dart';
 
 class MockProductsBloc extends MockBloc<ProductsEvent, ProductsState> {}
 
@@ -36,10 +34,7 @@ class RemoveFromCartUseCaseMock extends Mock implements RemoveFromCartUseCase {}
 class ClearCartUseCaseMock extends Mock implements ClearCartUseCase {}
 
 void main() {
-  setUpAll(() {
-    // Initialize AppConfig for tests
-    AppConfig.initialize();
-  });
+  setUpAll(AppConfig.initialize);
 
   group('Product entity', () {
     test('serialization and copyWith', () {
@@ -55,7 +50,7 @@ void main() {
       expect(product.title, 'Test Item');
       expect(product.price, 29.99);
 
-      final updated = product.copyWith(price: 35.0, title: 'Updated Item');
+      final updated = product.copyWith(price: 35, title: 'Updated Item');
       expect(updated.id, 'test_1');
       expect(updated.title, 'Updated Item');
       expect(updated.price, 35.0);
@@ -91,9 +86,9 @@ void main() {
         description: 'Desc',
       );
 
-      final cart = Cart(items: [
-        const CartItem(product: product, quantity: 2),
-        const CartItem(product: product, quantity: 1),
+      const cart = Cart(items: [
+        CartItem(product: product, quantity: 2),
+        CartItem(product: product, quantity: 1),
       ]);
 
       expect(cart.itemCount, 3);
@@ -102,7 +97,7 @@ void main() {
     });
 
     test('empty cart', () {
-      final cart = Cart(items: []);
+      const cart = Cart(items: []);
       expect(cart.itemCount, 0);
       expect(cart.total, 0.0);
       expect(cart.isEmpty, true);
@@ -117,14 +112,14 @@ void main() {
       Product(
         id: '1',
         title: 'Test Product 1',
-        price: 100.0,
+        price: 100,
         category: 'smartphones',
         description: 'Description 1',
       ),
       Product(
         id: '2',
         title: 'Test Product 2',
-        price: 200.0,
+        price: 200,
         category: 'audio',
         description: 'Description 2',
       ),
@@ -143,7 +138,7 @@ void main() {
       );
 
       when(() => getProductsUseCaseMock()).thenAnswer(
-        (_) async => Right(testProducts),
+        (_) async => const Right(testProducts),
       );
     });
 
@@ -154,7 +149,7 @@ void main() {
     blocTest<ProductsBloc, ProductsState>(
       'emits [ProductsLoading, ProductsLoaded] when LoadProductsEvent is added',
       build: () => productsBloc,
-      act: (bloc) => bloc.add(LoadProductsEvent()),
+      act: (bloc) => bloc.add(const LoadProductsEvent()),
       expect: () => [
         isA<ProductsLoading>(),
         isA<ProductsLoaded>(),
@@ -166,12 +161,12 @@ void main() {
     late CartBloc cartBloc;
     late GetCartUseCaseMock getCartUseCaseMock;
 
-    final testCart = Cart(items: [
+    const testCart = Cart(items: [
       CartItem(
-        product: const Product(
+        product: Product(
           id: '1',
           title: 'Test Product 1',
-          price: 100.0,
+          price: 100,
           category: 'smartphones',
           description: 'Description 1',
         ),
@@ -190,7 +185,7 @@ void main() {
       );
 
       when(() => getCartUseCaseMock()).thenAnswer(
-        (_) async => Right(testCart),
+        (_) async => const Right(testCart),
       );
     });
 
@@ -201,7 +196,7 @@ void main() {
     blocTest<CartBloc, CartState>(
       'emits [CartLoading, CartLoaded] when LoadCartEvent is added',
       build: () => cartBloc,
-      act: (bloc) => bloc.add(LoadCartEvent()),
+      act: (bloc) => bloc.add(const LoadCartEvent()),
       expect: () => [
         isA<CartLoading>(),
         isA<CartLoaded>(),

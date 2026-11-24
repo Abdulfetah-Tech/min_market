@@ -1,9 +1,7 @@
 // Product repository interface - defines contract for data access
 
-import 'package:fpdart/fpdart.dart';
-
+import '../../../../core/core.dart';
 import '../entities/product.dart';
-import 'package:min_market/core/core.dart';
 
 abstract class ProductRepository {
   /// Get all products

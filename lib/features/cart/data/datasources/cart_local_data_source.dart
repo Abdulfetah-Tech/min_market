@@ -5,9 +5,9 @@ import 'dart:convert';
 import 'package:fpdart/fpdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../../core/error/failures.dart';
+import '../../../products/domain/entities/product.dart';
 import '../../domain/entities/cart.dart';
-import 'package:min_market/features/products/domain/entities/product.dart';
-import 'package:min_market/core/error/failures.dart';
 
 abstract class CartLocalDataSource {
   Future<Result<Cart>> getCart();
@@ -16,11 +16,11 @@ abstract class CartLocalDataSource {
 }
 
 class CartLocalDataSourceImpl implements CartLocalDataSource {
+
+  CartLocalDataSourceImpl(this._prefs);
   static const String _cartKey = 'user_cart';
 
   final SharedPreferences _prefs;
-
-  CartLocalDataSourceImpl(this._prefs);
 
   @override
   Future<Result<Cart>> getCart() async {
@@ -114,17 +114,14 @@ class CartLocalDataSourceImpl implements CartLocalDataSource {
     );
   }
 
-  Map<String, dynamic> _cartToJson(Cart cart) {
-    return {
+  Map<String, dynamic> _cartToJson(Cart cart) => {
       'id': cart.id,
       'items': cart.items.map(_cartItemToJson).toList(),
       'createdAt': cart.createdAt?.toIso8601String(),
       'updatedAt': cart.updatedAt?.toIso8601String(),
     };
-  }
 
-  Map<String, dynamic> _cartItemToJson(CartItem item) {
-    return {
+  Map<String, dynamic> _cartItemToJson(CartItem item) => {
       'product': {
         'id': item.product.id,
         'title': item.product.title,
@@ -140,5 +137,4 @@ class CartLocalDataSourceImpl implements CartLocalDataSource {
       },
       'quantity': item.quantity,
     };
-  }
 }

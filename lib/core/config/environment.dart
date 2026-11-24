@@ -32,19 +32,16 @@ class AppConfig {
         apiTimeout = const String.fromEnvironment('API_TIMEOUT', defaultValue: '30000');
         enableLogging = true;
         appName = 'Mini Market Dev';
-        break;
       case Environment.staging:
         apiBaseUrl = const String.fromEnvironment('API_BASE_URL', defaultValue: 'https://dummyjson.com/products');
         apiTimeout = const String.fromEnvironment('API_TIMEOUT', defaultValue: '30000');
         enableLogging = true;
         appName = 'Mini Market Staging';
-        break;
       case Environment.production:
         apiBaseUrl = const String.fromEnvironment('API_BASE_URL', defaultValue: 'https://dummyjson.com/products');
         apiTimeout = const String.fromEnvironment('API_TIMEOUT', defaultValue: '15000');
         enableLogging = false;
         appName = 'Mini Market';
-        break;
     }
 
     if (kDebugMode) {

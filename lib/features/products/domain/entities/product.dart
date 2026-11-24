@@ -41,8 +41,7 @@ class Product extends Equatable {
     bool? inStock,
     DateTime? createdAt,
     DateTime? updatedAt,
-  }) {
-    return Product(
+  }) => Product(
       id: id ?? this.id,
       title: title ?? this.title,
       price: price ?? this.price,
@@ -55,7 +54,6 @@ class Product extends Equatable {
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
-  }
 
   @override
   List<Object?> get props => [
@@ -88,12 +86,10 @@ class CartItem extends Equatable {
   CartItem copyWith({
     Product? product,
     int? quantity,
-  }) {
-    return CartItem(
+  }) => CartItem(
       product: product ?? this.product,
       quantity: quantity ?? this.quantity,
     );
-  }
 
   @override
   List<Object?> get props => [product, quantity];

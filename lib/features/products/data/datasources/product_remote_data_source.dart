@@ -2,9 +2,9 @@
 
 import 'package:fpdart/fpdart.dart';
 
+import '../../../../core/core.dart';
 import '../../domain/entities/product.dart';
 import '../dtos/product_dto.dart';
-import 'package:min_market/core/core.dart';
 
 abstract class ProductRemoteDataSource {
   Future<Result<List<Product>>> getProducts();
@@ -15,27 +15,41 @@ abstract class ProductRemoteDataSource {
 }
 
 class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
-  final ApiClient _apiClient;
 
   ProductRemoteDataSourceImpl(this._apiClient);
+  final ApiClient _apiClient;
 
   @override
   Future<Result<List<Product>>> getProducts() async {
-    return _apiClient.get<ProductsResponseDto>(
+    final result = await _apiClient.get<ProductsResponseDto>(
       '',
-      parser: (data) => ProductsResponseDto.fromJson(data as Map<String, dynamic>),
-    ).then((result) => result.map(
+      parser: (data) {
+        try {
+          return ProductsResponseDto.fromJson(data as Map<String, dynamic>);
+        } catch (e) {
+          if (data is Map && data['products'] is List) {
+            for (int i = 0; i < (data['products'] as List).length; i++) {
+              try {
+                ProductDto.fromJson((data['products'] as List)[i] as Map<String, dynamic>);
+              } catch (productError) {
+                // Log individual product parsing errors for debugging
+              }
+            }
+          }
+          rethrow;
+        }
+      },
+    );
+    return result.map(
       (response) => response.products.map(_dtoToEntity).toList(),
-    ));
+    );
   }
 
   @override
-  Future<Result<Product>> getProduct(String id) async {
-    return _apiClient.get<ProductDto>(
+  Future<Result<Product>> getProduct(String id) async => _apiClient.get<ProductDto>(
       '/$id',
       parser: (data) => ProductDto.fromJson(data as Map<String, dynamic>),
     ).then((result) => result.map(_dtoToEntity));
-  }
 
   @override
   Future<Result<Product>> createProduct(Product product) async {
@@ -58,7 +72,7 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
   Future<Result<Product>> updateProduct(Product product) async {
     final numericId = int.tryParse(product.id);
     if (numericId == null) {
-      return Left(ValidationFailure(
+      return const Left(ValidationFailure(
         message: 'Invalid product ID',
         fieldErrors: {'id': 'Product ID must be numeric for API'},
       ));
@@ -83,7 +97,7 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
   Future<Result<void>> deleteProduct(String id) async {
     final numericId = int.tryParse(id);
     if (numericId == null) {
-      return Left(ValidationFailure(
+      return const Left(ValidationFailure(
         message: 'Invalid product ID',
         fieldErrors: {'id': 'Product ID must be numeric for API'},
       ));
@@ -92,8 +106,7 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
     return _apiClient.delete('/$numericId');
   }
 
-  Product _dtoToEntity(ProductDto dto) {
-    return Product(
+  Product _dtoToEntity(ProductDto dto) => Product(
       id: dto.id.toString(),
       title: dto.title,
       price: dto.price.toDouble(),
@@ -106,5 +119,4 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
       createdAt: dto.createdAt != null ? DateTime.tryParse(dto.createdAt!) : null,
       updatedAt: dto.updatedAt != null ? DateTime.tryParse(dto.updatedAt!) : null,
     );
-  }
 }

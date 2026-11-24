@@ -6,14 +6,13 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 import 'core/core.dart';
-import 'features/products/products_injection.dart';
 import 'features/cart/cart_injection.dart';
-import 'features/products/presentation/bloc/products_bloc.dart';
 import 'features/cart/presentation/bloc/cart_bloc.dart';
+import 'features/products/presentation/bloc/products_bloc.dart';
+import 'features/products/products_injection.dart';
 import 'router.dart';
 
 final GetIt sl = GetIt.instance;
@@ -55,28 +54,32 @@ class MiniMarketApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Provide explicit viewport constraints for Flutter web
+    final view = window.physicalSize / window.devicePixelRatio;
+
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => sl<ProductsBloc>()),
         BlocProvider(create: (context) => sl<CartBloc>()),
       ],
-      child: MaterialApp.router(
-        title: AppConfig.appName,
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.light(),
-        darkTheme: AppTheme.dark(),
-        themeMode: ThemeMode.system,
-        routerConfig: routes,
-        builder: (context, child) {
-          return MediaQuery(
-            data: MediaQuery.of(context).copyWith(
-              textScaler: TextScaler.linear(
-                MediaQuery.of(context).textScaler.scale(1.0).clamp(0.8, 1.3),
+      child: SizedBox(
+        width: view.width,
+        height: view.height,
+        child: MaterialApp.router(
+          title: AppConfig.appName,
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.light(),
+          darkTheme: AppTheme.dark(),
+          routerConfig: routes,
+          builder: (context, child) => MediaQuery(
+              data: MediaQuery.of(context).copyWith(
+                textScaler: TextScaler.linear(
+                  MediaQuery.of(context).textScaler.scale(1).clamp(0.8, 1.3),
+                ),
               ),
+              child: child!,
             ),
-            child: child!,
-          );
-        },
+        ),
       ),
     );
   }

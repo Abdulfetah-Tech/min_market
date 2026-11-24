@@ -2,20 +2,20 @@
 
 import 'package:fpdart/fpdart.dart';
 
+import '../../../../core/core.dart';
 import '../../domain/entities/product.dart';
 import '../../domain/repositories/product_repository.dart';
 import '../datasources/product_local_data_source.dart';
 import '../datasources/product_remote_data_source.dart';
-import 'package:min_market/core/core.dart';
 
 class ProductRepositoryImpl implements ProductRepository {
-  final ProductRemoteDataSource _remoteDataSource;
-  final ProductLocalDataSource _localDataSource;
 
   ProductRepositoryImpl(
     this._remoteDataSource,
     this._localDataSource,
   );
+  final ProductRemoteDataSource _remoteDataSource;
+  final ProductLocalDataSource _localDataSource;
 
   @override
   Future<Result<List<Product>>> getProducts() async {
@@ -127,9 +127,7 @@ class ProductRepositoryImpl implements ProductRepository {
         // For now, just return failure
         return Left(failure);
       },
-      (success) async {
-        return Right(success);
-      },
+      (success) async => Right(success),
     );
   }
 

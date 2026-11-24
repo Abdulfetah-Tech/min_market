@@ -2,29 +2,27 @@
 
 import 'package:fpdart/fpdart.dart';
 
+import '../../../../core/error/failures.dart';
+import '../../../products/domain/entities/product.dart';
 import '../entities/cart.dart';
 import '../repositories/cart_repository.dart';
-import 'package:min_market/features/products/domain/entities/product.dart';
-import 'package:min_market/core/error/failures.dart';
 
 class GetCartUseCase {
-  final CartRepository _repository;
 
   GetCartUseCase(this._repository);
+  final CartRepository _repository;
 
-  Future<Result<Cart>> call() async {
-    return _repository.getCart();
-  }
+  Future<Result<Cart>> call() async => _repository.getCart();
 }
 
 class AddToCartUseCase {
-  final CartRepository _repository;
 
   AddToCartUseCase(this._repository);
+  final CartRepository _repository;
 
   Future<Result<Cart>> call(CartItem item) async {
     if (item.quantity <= 0) {
-      return Left(ValidationFailure(
+      return const Left(ValidationFailure(
         message: 'Quantity must be greater than 0',
         fieldErrors: {'quantity': 'Quantity must be greater than 0'},
       ));
@@ -34,13 +32,13 @@ class AddToCartUseCase {
 }
 
 class UpdateCartQuantityUseCase {
-  final CartRepository _repository;
 
   UpdateCartQuantityUseCase(this._repository);
+  final CartRepository _repository;
 
   Future<Result<Cart>> call(String productId, int quantity) async {
     if (quantity < 0) {
-      return Left(ValidationFailure(
+      return const Left(ValidationFailure(
         message: 'Quantity cannot be negative',
         fieldErrors: {'quantity': 'Quantity cannot be negative'},
       ));
@@ -50,21 +48,17 @@ class UpdateCartQuantityUseCase {
 }
 
 class RemoveFromCartUseCase {
-  final CartRepository _repository;
 
   RemoveFromCartUseCase(this._repository);
+  final CartRepository _repository;
 
-  Future<Result<Cart>> call(String productId) async {
-    return _repository.removeItem(productId);
-  }
+  Future<Result<Cart>> call(String productId) async => _repository.removeItem(productId);
 }
 
 class ClearCartUseCase {
-  final CartRepository _repository;
 
   ClearCartUseCase(this._repository);
+  final CartRepository _repository;
 
-  Future<Result<Cart>> call() async {
-    return _repository.clear();
-  }
+  Future<Result<Cart>> call() async => _repository.clear();
 }

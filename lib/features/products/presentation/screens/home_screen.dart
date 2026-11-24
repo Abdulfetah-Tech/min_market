@@ -4,16 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:min_market/core/core.dart';
-import 'package:min_market/features/products/domain/entities/product.dart';
-import 'package:min_market/features/products/presentation/bloc/products_bloc.dart';
-import 'package:min_market/features/products/presentation/bloc/products_event.dart';
-import 'package:min_market/features/products/presentation/bloc/products_state.dart';
-import 'package:min_market/features/products/presentation/widgets/product_card.dart';
-import 'package:min_market/features/products/presentation/screens/product_detail_screen.dart';
-import 'package:min_market/features/products/presentation/screens/product_form_screen.dart';
-import 'package:min_market/features/cart/presentation/bloc/cart_bloc.dart';
-import 'package:min_market/features/cart/presentation/bloc/cart_state.dart';
+import '../../../../core/core.dart';
+import '../../../cart/presentation/bloc/cart_bloc.dart';
+import '../../../cart/presentation/bloc/cart_state.dart';
+import '../../domain/entities/product.dart';
+import '../bloc/products_bloc.dart';
+import '../bloc/products_event.dart';
+import '../bloc/products_state.dart';
+import '../widgets/product_card.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -26,24 +24,23 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<ProductsBloc>().add(LoadProductsEvent());
+    context.read<ProductsBloc>().add(const LoadProductsEvent());
   }
 
   Future<void> _openProductDetail(Product product) async {
     await context.push('/product/${product.id}');
     if (!mounted) return;
-    context.read<ProductsBloc>().add(RefreshProductsEvent());
+    context.read<ProductsBloc>().add(const RefreshProductsEvent());
   }
 
   Future<void> _openAddProduct() async {
     await context.push('/product/new');
     if (!mounted) return;
-    context.read<ProductsBloc>().add(RefreshProductsEvent());
+    context.read<ProductsBloc>().add(const RefreshProductsEvent());
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(
         centerTitle: false,
         title: Text(
@@ -76,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: BlocBuilder<ProductsBloc, ProductsState>(
         builder: (context, state) {
           if (state is ProductsLoading && state.isFirstLoad) {
-            return const HomeGridShimmer(itemCount: 6);
+            return const HomeGridShimmer();
           }
 
           if (state is ProductsError) {
@@ -86,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
             }
             return ErrorState(
               message: state.failure.message,
-              onRetry: () => context.read<ProductsBloc>().add(LoadProductsEvent()),
+              onRetry: () => context.read<ProductsBloc>().add(const LoadProductsEvent()),
             );
           }
 
@@ -111,7 +108,6 @@ class _HomeScreenState extends State<HomeScreen> {
         child: const Icon(Icons.add),
       ),
     );
-  }
 
   Widget _buildProductGrid(
     BuildContext context,
@@ -121,24 +117,35 @@ class _HomeScreenState extends State<HomeScreen> {
     final screenWidth = MediaQuery.sizeOf(context).width;
     final crossAxisCount = Breakpoints.crossAxisCount(screenWidth);
 
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: GridView.builder(
-        itemCount: products.length,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: crossAxisCount,
-          mainAxisSpacing: 10,
-          crossAxisSpacing: 10,
-          childAspectRatio: 0.85,
+    // Calculate item height based on aspect ratio
+    final itemWidth = (screenWidth - 16 * 2 - 10 * (crossAxisCount - 1)) / crossAxisCount;
+    final itemHeight = itemWidth / 0.85;
+
+    // Use CustomScrollView with SliverGrid to avoid infinite height constraints on Flutter web
+    return CustomScrollView(
+      slivers: [
+        SliverPadding(
+          padding: const EdgeInsets.all(16),
+          sliver: SliverGrid(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                final product = products[index];
+                return ProductCard(
+                  product: product,
+                  onTap: () => onTap(product),
+                );
+              },
+              childCount: products.length,
+            ),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: crossAxisCount,
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 10,
+              mainAxisExtent: itemHeight,
+            ),
+          ),
         ),
-        itemBuilder: (context, index) {
-          final product = products[index];
-          return ProductCard(
-            product: product,
-            onTap: () => onTap(product),
-          );
-        },
-      ),
+      ],
     );
   }
 }

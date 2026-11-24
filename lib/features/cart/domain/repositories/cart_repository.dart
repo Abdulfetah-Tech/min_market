@@ -1,10 +1,8 @@
 // Cart repository interface
 
-import 'package:fpdart/fpdart.dart';
-
+import '../../../../core/error/failures.dart';
+import '../../../products/domain/entities/product.dart';
 import '../entities/cart.dart';
-import 'package:min_market/features/products/domain/entities/product.dart';
-import 'package:min_market/core/error/failures.dart';
 
 abstract class CartRepository {
   /// Get current cart

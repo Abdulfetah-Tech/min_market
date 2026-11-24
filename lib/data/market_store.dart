@@ -81,9 +81,7 @@ class MarketStore {
     cart.removeWhere((item) => item.product.id == id);
   }
 
-  static String newProductId() {
-    return 'p${DateTime.now().millisecondsSinceEpoch}';
-  }
+  static String newProductId() => 'p${DateTime.now().millisecondsSinceEpoch}';
 
   static void addToCart(Product product, int quantity) {
     final index = cart.indexWhere((item) => item.product.id == product.id);

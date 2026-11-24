@@ -6,9 +6,7 @@ import 'package:shimmer/shimmer.dart';
 /// Base shimmer widget with configurable shape
 class ShimmerWidget extends StatelessWidget {
   const ShimmerWidget({
-    super.key,
-    required this.width,
-    required this.height,
+    required this.width, required this.height, super.key,
     this.borderRadius = 8,
     this.baseColor,
     this.highlightColor,
@@ -48,32 +46,32 @@ class ProductCardShimmer extends StatelessWidget {
   const ProductCardShimmer({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
+  Widget build(BuildContext context) => Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.grey.shade300),
       ),
-      child: Column(
+      child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Image placeholder
-          const ShimmerWidget(
-            width: double.infinity,
-            height: double.infinity,
-            borderRadius: 8,
+          // Image placeholder - use Expanded to fill available height
+          Expanded(
+            child: ShimmerWidget(
+              width: double.infinity,
+              height: double.infinity,
+            ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           // Title placeholder
-          const ShimmerWidget(
+          ShimmerWidget(
             width: double.infinity,
             height: 16,
             borderRadius: 4,
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: 4),
           // Price placeholder
-          const ShimmerWidget(
+          ShimmerWidget(
             width: 80,
             height: 16,
             borderRadius: 4,
@@ -81,7 +79,6 @@ class ProductCardShimmer extends StatelessWidget {
         ],
       ),
     );
-  }
 }
 
 /// Shimmer for product detail screen
@@ -89,61 +86,60 @@ class ProductDetailShimmer extends StatelessWidget {
   const ProductDetailShimmer({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+  Widget build(BuildContext context) => const SingleChildScrollView(
+      padding: EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Image placeholder
-          const ShimmerWidget(
+          ShimmerWidget(
             width: double.infinity,
             height: 220,
             borderRadius: 12,
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
           // Title placeholder
-          const ShimmerWidget(
+          ShimmerWidget(
             width: double.infinity,
             height: 28,
             borderRadius: 4,
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: 4),
           // Price placeholder
-          const ShimmerWidget(
+          ShimmerWidget(
             width: 120,
             height: 24,
             borderRadius: 4,
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           // Description placeholder
-          const ShimmerWidget(
+          ShimmerWidget(
             width: double.infinity,
             height: 16,
             borderRadius: 4,
           ),
-          const SizedBox(height: 8),
-          const ShimmerWidget(
+          SizedBox(height: 8),
+          ShimmerWidget(
             width: double.infinity,
             height: 16,
             borderRadius: 4,
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: 24),
           // Quantity row placeholder
           Row(
             children: [
-              const ShimmerWidget(width: 40, height: 16, borderRadius: 4),
-              const SizedBox(width: 16),
-              const ShimmerWidget(width: 40, height: 40, borderRadius: 10),
-              const SizedBox(width: 8),
-              const ShimmerWidget(width: 44, height: 40, borderRadius: 10),
-              const SizedBox(width: 8),
-              const ShimmerWidget(width: 40, height: 40, borderRadius: 10),
+              ShimmerWidget(width: 40, height: 16, borderRadius: 4),
+              SizedBox(width: 16),
+              ShimmerWidget(width: 40, height: 40, borderRadius: 10),
+              SizedBox(width: 8),
+              ShimmerWidget(width: 44, height: 40, borderRadius: 10),
+              SizedBox(width: 8),
+              ShimmerWidget(width: 40, height: 40, borderRadius: 10),
             ],
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: 24),
           // Add to cart button placeholder
-          const ShimmerWidget(
+          ShimmerWidget(
             width: double.infinity,
             height: 54,
             borderRadius: 10,
@@ -151,7 +147,6 @@ class ProductDetailShimmer extends StatelessWidget {
         ],
       ),
     );
-  }
 }
 
 /// Shimmer for cart screen
@@ -159,8 +154,7 @@ class CartShimmer extends StatelessWidget {
   const CartShimmer({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
+  Widget build(BuildContext context) => Column(
       children: [
         Expanded(
           child: ListView.separated(
@@ -171,19 +165,19 @@ class CartShimmer extends StatelessWidget {
           ),
         ),
         const Divider(height: 1),
-        Padding(
-          padding: const EdgeInsets.all(16),
+        const Padding(
+          padding: EdgeInsets.all(16),
           child: Column(
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const ShimmerWidget(width: 60, height: 16, borderRadius: 4),
-                  const ShimmerWidget(width: 100, height: 24, borderRadius: 4),
+                  ShimmerWidget(width: 60, height: 16, borderRadius: 4),
+                  ShimmerWidget(width: 100, height: 24, borderRadius: 4),
                 ],
               ),
-              const SizedBox(height: 12),
-              const ShimmerWidget(
+              SizedBox(height: 12),
+              ShimmerWidget(
                 width: double.infinity,
                 height: 50,
                 borderRadius: 10,
@@ -193,7 +187,6 @@ class CartShimmer extends StatelessWidget {
         ),
       ],
     );
-  }
 }
 
 /// Shimmer for cart item
@@ -201,15 +194,13 @@ class CartItemShimmer extends StatelessWidget {
   const CartItemShimmer({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      contentPadding: const EdgeInsets.symmetric(vertical: 8),
-      leading: const ShimmerWidget(width: 48, height: 48, borderRadius: 8),
-      title: const ShimmerWidget(width: 150, height: 16, borderRadius: 4),
-      subtitle: const ShimmerWidget(width: 60, height: 14, borderRadius: 4),
-      trailing: const ShimmerWidget(width: 24, height: 24, borderRadius: 4),
+  Widget build(BuildContext context) => const ListTile(
+      contentPadding: EdgeInsets.symmetric(vertical: 8),
+      leading: ShimmerWidget(width: 48, height: 48),
+      title: ShimmerWidget(width: 150, height: 16, borderRadius: 4),
+      subtitle: ShimmerWidget(width: 60, height: 14, borderRadius: 4),
+      trailing: ShimmerWidget(width: 24, height: 24, borderRadius: 4),
     );
-  }
 }
 
 /// Shimmer for home screen grid
@@ -225,18 +216,29 @@ class HomeGridShimmer extends StatelessWidget {
         ? 4
         : (screenWidth > 600 ? 3 : 2);
 
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: GridView.builder(
-        itemCount: itemCount,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: crossAxisCount,
-          mainAxisSpacing: 10,
-          crossAxisSpacing: 10,
-          childAspectRatio: 0.85,
+    // Calculate item height based on aspect ratio
+    final itemWidth = (screenWidth - 16 * 2 - 10 * (crossAxisCount - 1)) / crossAxisCount;
+    final itemHeight = itemWidth / 0.85;
+
+    // Use CustomScrollView with SliverGrid to avoid infinite height constraints on Flutter web
+    return CustomScrollView(
+      slivers: [
+        SliverPadding(
+          padding: const EdgeInsets.all(16),
+          sliver: SliverGrid(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) => const ProductCardShimmer(),
+              childCount: itemCount,
+            ),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: crossAxisCount,
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 10,
+              mainAxisExtent: itemHeight,
+            ),
+          ),
         ),
-        itemBuilder: (context, index) => const ProductCardShimmer(),
-      ),
+      ],
     );
   }
 }
@@ -261,13 +263,11 @@ class ListItemShimmer extends StatelessWidget {
   final double trailingHeight;
 
   @override
-  Widget build(BuildContext context) {
-    return ListTile(
+  Widget build(BuildContext context) => ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       leading: ShimmerWidget(
         width: leadingWidth,
         height: leadingHeight,
-        borderRadius: 8,
       ),
       title: ShimmerWidget(
         width: titleWidth,
@@ -285,5 +285,4 @@ class ListItemShimmer extends StatelessWidget {
         borderRadius: 4,
       ),
     );
-  }
 }

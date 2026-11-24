@@ -2,7 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'package:min_market/features/products/domain/entities/product.dart';
+import '../../../products/domain/entities/product.dart';
 
 class Cart extends Equatable {
   const Cart({
@@ -19,7 +19,7 @@ class Cart extends Equatable {
 
   int get itemCount => items.fold(0, (sum, item) => sum + item.quantity);
 
-  double get total => items.fold(0.0, (sum, item) => sum + item.total);
+  double get total => items.fold(0, (sum, item) => sum + item.total);
 
   bool get isEmpty => items.isEmpty;
 
@@ -30,14 +30,12 @@ class Cart extends Equatable {
     List<CartItem>? items,
     DateTime? createdAt,
     DateTime? updatedAt,
-  }) {
-    return Cart(
+  }) => Cart(
       id: id ?? this.id,
       items: items ?? this.items,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
-  }
 
   @override
   List<Object?> get props => [id, items, createdAt, updatedAt];

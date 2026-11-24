@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:min_market/core/core.dart';
-import 'package:min_market/features/cart/domain/entities/cart.dart';
-import 'package:min_market/features/products/domain/entities/product.dart';
-import 'package:min_market/features/cart/presentation/bloc/cart_bloc.dart';
-import 'package:min_market/features/cart/presentation/bloc/cart_event.dart';
-import 'package:min_market/features/cart/presentation/bloc/cart_state.dart';
+import '../../../../core/core.dart';
+import '../../../products/domain/entities/product.dart';
+import '../../domain/entities/cart.dart';
+import '../bloc/cart_bloc.dart';
+import '../bloc/cart_event.dart';
+import '../bloc/cart_state.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -49,7 +49,6 @@ class _CartScreenState extends State<CartScreen> {
           ),
           AppButton(
             onPressed: () => Navigator.pop(context, true),
-            variant: AppButtonVariant.primary,
             child: const Text('Confirm'),
           ),
         ],
@@ -79,8 +78,7 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(
         title: const Text(
           'Your cart',
@@ -116,10 +114,8 @@ class _CartScreenState extends State<CartScreen> {
         },
       ),
     );
-  }
 
-  Widget _buildCartContent(BuildContext context, Cart cart) {
-    return cart.isEmpty
+  Widget _buildCartContent(BuildContext context, Cart cart) => cart.isEmpty
         ? EmptyState(
             title: 'Your cart is empty',
             message: 'Add some products to get started.',
@@ -193,17 +189,11 @@ class _CartScreenState extends State<CartScreen> {
               ),
             ],
           );
-  }
 }
 
 class CartItemTile extends StatelessWidget {
   const CartItemTile({
-    super.key,
-    required this.item,
-    required this.color,
-    required this.icon,
-    required this.onQuantityChanged,
-    required this.onRemove,
+    required this.item, required this.color, required this.icon, required this.onQuantityChanged, required this.onRemove, super.key,
   });
 
   final CartItem item;
@@ -233,7 +223,7 @@ class CartItemTile extends StatelessWidget {
       ),
       subtitle: Row(
         children: [
-          Text('Qty '),
+          const Text('Qty '),
           _QuantitySelector(
             quantity: item.quantity,
             onChanged: onQuantityChanged,
@@ -264,8 +254,7 @@ class _QuantitySelector extends StatelessWidget {
   final ValueChanged<int> onChanged;
 
   @override
-  Widget build(BuildContext context) {
-    return Row(
+  Widget build(BuildContext context) => Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         _QuantityButton(
@@ -287,7 +276,6 @@ class _QuantitySelector extends StatelessWidget {
         ),
       ],
     );
-  }
 }
 
 class _QuantityButton extends StatelessWidget {
@@ -302,8 +290,7 @@ class _QuantityButton extends StatelessWidget {
   final bool enabled;
 
   @override
-  Widget build(BuildContext context) {
-    return InkWell(
+  Widget build(BuildContext context) => InkWell(
       onTap: enabled ? onPressed : null,
       borderRadius: BorderRadius.circular(10),
       child: Container(
@@ -311,7 +298,6 @@ class _QuantityButton extends StatelessWidget {
         height: 32,
         decoration: BoxDecoration(
           border: Border.all(
-            width: 1,
             color: enabled ? Colors.grey.shade300 : Colors.grey.shade200,
           ),
           borderRadius: const BorderRadius.all(Radius.circular(10)),
@@ -323,5 +309,4 @@ class _QuantityButton extends StatelessWidget {
         ),
       ),
     );
-  }
 }

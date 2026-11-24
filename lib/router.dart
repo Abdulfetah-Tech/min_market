@@ -2,11 +2,11 @@
 
 import 'package:go_router/go_router.dart';
 
+import 'features/cart/presentation/screens/cart_screen.dart';
 import 'features/products/domain/entities/product.dart';
 import 'features/products/presentation/screens/home_screen.dart';
 import 'features/products/presentation/screens/product_detail_screen.dart';
 import 'features/products/presentation/screens/product_form_screen.dart';
-import 'features/cart/presentation/screens/cart_screen.dart';
 
 final GoRouter routes = GoRouter(
   initialLocation: '/',

@@ -2,17 +2,17 @@
 
 import 'package:fpdart/fpdart.dart';
 
+import '../../../../core/error/failures.dart';
+import '../../../products/domain/entities/product.dart';
 import '../../domain/entities/cart.dart';
 import '../../domain/repositories/cart_repository.dart';
 import '../datasources/cart_local_data_source.dart';
-import 'package:min_market/features/products/domain/entities/product.dart';
-import 'package:min_market/core/error/failures.dart';
 
 class CartRepositoryImpl implements CartRepository {
-  final CartLocalDataSource _localDataSource;
-  Cart? _cachedCart;
 
   CartRepositoryImpl(this._localDataSource);
+  final CartLocalDataSource _localDataSource;
+  Cart? _cachedCart;
 
   @override
   Future<Result<Cart>> getCart() async {
@@ -79,7 +79,7 @@ class CartRepositoryImpl implements CartRepository {
     );
 
     if (existingIndex == -1) {
-      return Left(NotFoundFailure(
+      return const Left(NotFoundFailure(
         message: 'Product not found in cart',
       ));
     }
@@ -137,7 +137,7 @@ class CartRepositoryImpl implements CartRepository {
 
   @override
   Future<Result<Cart>> clear() async {
-    final emptyCart = Cart(items: []);
+    const emptyCart = Cart(items: []);
     _cachedCart = emptyCart;
     final saveResult = await _localDataSource.saveCart(emptyCart);
     return saveResult.map((_) => emptyCart);

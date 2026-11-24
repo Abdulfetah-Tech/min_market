@@ -3,9 +3,9 @@
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:min_market/core/core.dart';
 import 'data/cart_data.dart';
 import 'domain/cart_domain.dart';
+import 'presentation/bloc/cart_bloc.dart';
 
 final GetIt sl = GetIt.instance;
 
@@ -39,5 +39,16 @@ void registerCartDependencies() {
 
   sl.registerLazySingleton<ClearCartUseCase>(
     () => ClearCartUseCase(sl<CartRepository>()),
+  );
+
+  // BLoC
+  sl.registerLazySingleton<CartBloc>(
+    () => CartBloc(
+      getCartUseCase: sl<GetCartUseCase>(),
+      addToCartUseCase: sl<AddToCartUseCase>(),
+      updateQuantityUseCase: sl<UpdateCartQuantityUseCase>(),
+      removeFromCartUseCase: sl<RemoveFromCartUseCase>(),
+      clearCartUseCase: sl<ClearCartUseCase>(),
+    ),
   );
 }

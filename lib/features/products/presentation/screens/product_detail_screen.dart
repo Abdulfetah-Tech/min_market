@@ -1,24 +1,22 @@
 // Product detail screen
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
-import 'package:min_market/core/core.dart';
-import 'package:min_market/features/products/domain/entities/product.dart';
-import 'package:min_market/features/cart/domain/entities/cart.dart';
-import 'package:min_market/features/products/presentation/bloc/products_bloc.dart';
-import 'package:min_market/features/products/presentation/bloc/products_event.dart';
-import 'package:min_market/features/products/presentation/bloc/products_state.dart';
-import 'package:min_market/features/cart/presentation/bloc/cart_bloc.dart';
-import 'package:min_market/features/cart/presentation/bloc/cart_event.dart';
-import 'package:min_market/features/products/presentation/screens/product_form_screen.dart';
+import '../../../../core/core.dart';
+import '../../../cart/presentation/bloc/cart_bloc.dart';
+import '../../../cart/presentation/bloc/cart_event.dart';
+import '../../domain/entities/product.dart';
+import '../bloc/products_bloc.dart';
+import '../bloc/products_event.dart';
+import '../bloc/products_state.dart';
 
 class ProductDetailScreen extends StatefulWidget {
-  final String productId;
 
-  const ProductDetailScreen({super.key, required this.productId});
+  const ProductDetailScreen({required this.productId, super.key});
+  final String productId;
 
   @override
   State<ProductDetailScreen> createState() => _ProductDetailScreenState();
@@ -85,8 +83,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<ProductsBloc, ProductsState>(
+  Widget build(BuildContext context) => BlocBuilder<ProductsBloc, ProductsState>(
       builder: (context, state) {
         if (state is ProductLoading && state.isFirstLoad) {
           return const Scaffold(body: ProductDetailShimmer());
@@ -147,7 +144,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         return const Scaffold(body: Center(child: CircularProgressIndicator()));
       },
     );
-  }
 
   Widget _buildDetail(BuildContext context, Product product) {
     final categoryTheme = Theme.of(context).extension<CategoryTheme>()!;
@@ -289,7 +285,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 height: 54,
                 child: AppButton(
                   onPressed: () => _addToCart(product),
-                  variant: AppButtonVariant.primary,
                   size: AppButtonSize.large,
                   child: const Text(
                     'Add to cart',
@@ -315,19 +310,17 @@ class _QuantityButton extends StatelessWidget {
   final IconData icon;
 
   @override
-  Widget build(BuildContext context) {
-    return InkWell(
+  Widget build(BuildContext context) => InkWell(
       onTap: onPressed,
       borderRadius: BorderRadius.circular(10),
       child: Container(
         width: 40,
         height: 40,
         decoration: BoxDecoration(
-          border: Border.all(width: 1, color: Colors.grey.shade300),
+          border: Border.all(color: Colors.grey.shade300),
           borderRadius: const BorderRadius.all(Radius.circular(10)),
         ),
         child: Icon(icon, size: 20),
       ),
     );
-  }
 }

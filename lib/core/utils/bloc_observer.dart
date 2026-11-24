@@ -4,9 +4,9 @@ import 'package:bloc/bloc.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 class AppBlocObserver extends BlocObserver {
-  final Talker _talker;
 
   AppBlocObserver(this._talker);
+  final Talker _talker;
 
   @override
   void onCreate(BlocBase bloc) {

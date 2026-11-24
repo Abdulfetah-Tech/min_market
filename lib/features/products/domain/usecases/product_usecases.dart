@@ -2,30 +2,28 @@
 
 import 'package:fpdart/fpdart.dart';
 
+import '../../../../core/error/failures.dart';
 import '../entities/product.dart';
 import '../repositories/product_repository.dart';
-import 'package:min_market/core/error/failures.dart';
 
 /// Use case for getting all products
 class GetProductsUseCase {
-  final ProductRepository _repository;
 
   GetProductsUseCase(this._repository);
+  final ProductRepository _repository;
 
-  Future<Result<List<Product>>> call() async {
-    return _repository.getProducts();
-  }
+  Future<Result<List<Product>>> call() async => _repository.getProducts();
 }
 
 /// Use case for getting a single product
 class GetProductUseCase {
-  final ProductRepository _repository;
 
   GetProductUseCase(this._repository);
+  final ProductRepository _repository;
 
   Future<Result<Product>> call(String id) async {
     if (id.trim().isEmpty) {
-      return Left(ValidationFailure(
+      return const Left(ValidationFailure(
         message: 'Product ID is required',
         fieldErrors: {'id': 'Product ID is required'},
       ));
@@ -36,9 +34,9 @@ class GetProductUseCase {
 
 /// Use case for creating a product
 class CreateProductUseCase {
-  final ProductRepository _repository;
 
   CreateProductUseCase(this._repository);
+  final ProductRepository _repository;
 
   Future<Result<Product>> call(Product product) async {
     // Validate product
@@ -81,13 +79,13 @@ class CreateProductUseCase {
 
 /// Use case for updating a product
 class UpdateProductUseCase {
-  final ProductRepository _repository;
 
   UpdateProductUseCase(this._repository);
+  final ProductRepository _repository;
 
   Future<Result<Product>> call(Product product) async {
     if (product.id.trim().isEmpty) {
-      return Left(ValidationFailure(
+      return const Left(ValidationFailure(
         message: 'Product ID is required',
         fieldErrors: {'id': 'Product ID is required'},
       ));
@@ -133,13 +131,13 @@ class UpdateProductUseCase {
 
 /// Use case for deleting a product
 class DeleteProductUseCase {
-  final ProductRepository _repository;
 
   DeleteProductUseCase(this._repository);
+  final ProductRepository _repository;
 
   Future<Result<void>> call(String id) async {
     if (id.trim().isEmpty) {
-      return Left(ValidationFailure(
+      return const Left(ValidationFailure(
         message: 'Product ID is required',
         fieldErrors: {'id': 'Product ID is required'},
       ));
@@ -150,9 +148,9 @@ class DeleteProductUseCase {
 
 /// Use case for searching products
 class SearchProductsUseCase {
-  final ProductRepository _repository;
 
   SearchProductsUseCase(this._repository);
+  final ProductRepository _repository;
 
   Future<Result<List<Product>>> call(String query) async {
     if (query.trim().isEmpty) {
@@ -164,9 +162,9 @@ class SearchProductsUseCase {
 
 /// Use case for getting products by category
 class GetProductsByCategoryUseCase {
-  final ProductRepository _repository;
 
   GetProductsByCategoryUseCase(this._repository);
+  final ProductRepository _repository;
 
   Future<Result<List<Product>>> call(String category) async {
     if (category.trim().isEmpty) {

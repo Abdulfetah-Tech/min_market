@@ -67,12 +67,10 @@ class CategoryTheme extends ThemeExtension<CategoryTheme> {
   CategoryTheme copyWith({
     Map<String, Color>? colors,
     Map<String, IconData>? icons,
-  }) {
-    return CategoryTheme(
+  }) => CategoryTheme(
       colors: colors ?? this.colors,
       icons: icons ?? this.icons,
     );
-  }
 
   @override
   CategoryTheme lerp(ThemeExtension<CategoryTheme>? other, double t) {
@@ -80,7 +78,7 @@ class CategoryTheme extends ThemeExtension<CategoryTheme> {
     return CategoryTheme(
       colors: {
         for (final key in colors.keys)
-          key: Color.lerp(colors[key]!, other.colors[key]!, t)!,
+          key: Color.lerp(colors[key], other.colors[key], t)!,
       },
       icons: icons, // Icons don't lerp
     );
@@ -92,21 +90,21 @@ class CategoryTheme extends ThemeExtension<CategoryTheme> {
 class AppSpacing extends ThemeExtension<AppSpacing> {
   const AppSpacing();
 
-  static const double xs = 4.0;
-  static const double sm = 8.0;
-  static const double md = 16.0;
-  static const double lg = 24.0;
-  static const double xl = 32.0;
-  static const double xxl = 48.0;
+  static const double xs = 4;
+  static const double sm = 8;
+  static const double md = 16;
+  static const double lg = 24;
+  static const double xl = 32;
+  static const double xxl = 48;
 
-  static const double radiusSm = 8.0;
-  static const double radiusMd = 12.0;
-  static const double radiusLg = 16.0;
-  static const double radiusXl = 24.0;
+  static const double radiusSm = 8;
+  static const double radiusMd = 12;
+  static const double radiusLg = 16;
+  static const double radiusXl = 24;
 
-  static const double elevationLow = 1.0;
-  static const double elevationMed = 4.0;
-  static const double elevationHigh = 8.0;
+  static const double elevationLow = 1;
+  static const double elevationMed = 4;
+  static const double elevationHigh = 8;
 
   @override
   AppSpacing copyWith() => const AppSpacing();
@@ -131,7 +129,7 @@ class AppTheme {
       colorScheme: colorScheme,
       scaffoldBackgroundColor: colorScheme.surface,
       extensions: [
-        isDark ? CategoryTheme.dark : CategoryTheme.light,
+        if (isDark) CategoryTheme.dark else CategoryTheme.light,
         const AppSpacing(),
       ],
       textTheme: _textTheme(colorScheme),

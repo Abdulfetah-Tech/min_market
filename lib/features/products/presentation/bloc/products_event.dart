@@ -16,54 +16,54 @@ class LoadProductsEvent extends ProductsEvent {
 }
 
 class LoadProductEvent extends ProductsEvent {
-  final String productId;
 
   const LoadProductEvent(this.productId);
+  final String productId;
 
   @override
   List<Object?> get props => [productId];
 }
 
 class CreateProductEvent extends ProductsEvent {
-  final Product product;
 
   const CreateProductEvent(this.product);
+  final Product product;
 
   @override
   List<Object?> get props => [product];
 }
 
 class UpdateProductEvent extends ProductsEvent {
-  final Product product;
 
   const UpdateProductEvent(this.product);
+  final Product product;
 
   @override
   List<Object?> get props => [product];
 }
 
 class DeleteProductEvent extends ProductsEvent {
-  final String productId;
 
   const DeleteProductEvent(this.productId);
+  final String productId;
 
   @override
   List<Object?> get props => [productId];
 }
 
 class SearchProductsEvent extends ProductsEvent {
-  final String query;
 
   const SearchProductsEvent(this.query);
+  final String query;
 
   @override
   List<Object?> get props => [query];
 }
 
 class LoadProductsByCategoryEvent extends ProductsEvent {
-  final String category;
 
   const LoadProductsByCategoryEvent(this.category);
+  final String category;
 
   @override
   List<Object?> get props => [category];

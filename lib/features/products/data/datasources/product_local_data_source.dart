@@ -5,8 +5,8 @@ import 'dart:convert';
 import 'package:fpdart/fpdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../../core/core.dart';
 import '../../domain/entities/product.dart';
-import 'package:min_market/core/core.dart';
 
 abstract class ProductLocalDataSource {
   Future<Result<List<Product>>> getCachedProducts();
@@ -19,12 +19,12 @@ abstract class ProductLocalDataSource {
 }
 
 class ProductLocalDataSourceImpl implements ProductLocalDataSource {
+
+  ProductLocalDataSourceImpl(this._prefs);
   static const String _cacheKey = 'cached_products';
   static const String _lastCacheTimeKey = 'products_last_cache_time';
 
   final SharedPreferences _prefs;
-
-  ProductLocalDataSourceImpl(this._prefs);
 
   @override
   Future<Result<List<Product>>> getCachedProducts() async {
@@ -68,24 +68,30 @@ class ProductLocalDataSourceImpl implements ProductLocalDataSource {
   @override
   Future<Result<void>> cacheProduct(Product product) async {
     final result = await getCachedProducts();
-    return result.flatMap((products) {
-      final existingIndex = products.indexWhere((p) => p.id == product.id);
-      if (existingIndex >= 0) {
-        products[existingIndex] = product;
-      } else {
-        products.insert(0, product);
-      }
-      return cacheProducts(products) as Either<Failure, void>;
-    });
+    return result.fold(
+      Left.new,
+      (products) async {
+        final existingIndex = products.indexWhere((p) => p.id == product.id);
+        if (existingIndex >= 0) {
+          products[existingIndex] = product;
+        } else {
+          products.insert(0, product);
+        }
+        return cacheProducts(products);
+      },
+    );
   }
 
   @override
   Future<Result<void>> removeCachedProduct(String id) async {
     final result = await getCachedProducts();
-    return result.flatMap((products) {
-      final updated = products.where((p) => p.id != id).toList();
-      return cacheProducts(updated) as Either<Failure, void>;
-    });
+    return result.fold(
+      Left.new,
+      (products) async {
+        final updated = products.where((p) => p.id != id).toList();
+        return cacheProducts(updated);
+      },
+    );
   }
 
   @override
@@ -132,8 +138,7 @@ class ProductLocalDataSourceImpl implements ProductLocalDataSource {
     }
   }
 
-  Product _jsonToEntity(Map<String, dynamic> json) {
-    return Product(
+  Product _jsonToEntity(Map<String, dynamic> json) => Product(
       id: json['id'] as String,
       title: json['title'] as String,
       price: (json['price'] as num).toDouble(),
@@ -150,10 +155,8 @@ class ProductLocalDataSourceImpl implements ProductLocalDataSource {
           ? DateTime.tryParse(json['updatedAt'] as String)
           : null,
     );
-  }
 
-  Map<String, dynamic> _entityToJson(Product product) {
-    return {
+  Map<String, dynamic> _entityToJson(Product product) => {
       'id': product.id,
       'title': product.title,
       'price': product.price,
@@ -166,5 +169,4 @@ class ProductLocalDataSourceImpl implements ProductLocalDataSource {
       'createdAt': product.createdAt?.toIso8601String(),
       'updatedAt': product.updatedAt?.toIso8601String(),
     };
-  }
 }

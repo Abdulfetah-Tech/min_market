@@ -1,7 +1,6 @@
 // Products BLoC - business logic for products feature
 
 import 'package:bloc/bloc.dart';
-import 'package:fpdart/fpdart.dart';
 
 import '../../domain/entities/product.dart';
 import '../../domain/usecases/product_usecases.dart';
@@ -9,13 +8,6 @@ import 'products_event.dart';
 import 'products_state.dart';
 
 class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
-  final GetProductsUseCase _getProductsUseCase;
-  final GetProductUseCase _getProductUseCase;
-  final CreateProductUseCase _createProductUseCase;
-  final UpdateProductUseCase _updateProductUseCase;
-  final DeleteProductUseCase _deleteProductUseCase;
-  final SearchProductsUseCase _searchProductsUseCase;
-  final GetProductsByCategoryUseCase _getProductsByCategoryUseCase;
 
   ProductsBloc({
     required GetProductsUseCase getProductsUseCase,
@@ -42,18 +34,31 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
     on<LoadProductsByCategoryEvent>(_onLoadProductsByCategory);
     on<RefreshProductsEvent>(_onRefreshProducts);
   }
+  final GetProductsUseCase _getProductsUseCase;
+  final GetProductUseCase _getProductUseCase;
+  final CreateProductUseCase _createProductUseCase;
+  final UpdateProductUseCase _updateProductUseCase;
+  final DeleteProductUseCase _deleteProductUseCase;
+  final SearchProductsUseCase _searchProductsUseCase;
+  final GetProductsByCategoryUseCase _getProductsByCategoryUseCase;
 
   Future<void> _onLoadProducts(
     LoadProductsEvent event,
     Emitter<ProductsState> emit,
   ) async {
-    emit(const ProductsLoading(isFirstLoad: true));
+    emit(const ProductsLoading());
 
     final result = await _getProductsUseCase();
 
     result.fold(
-      (failure) => emit(ProductsError(failure: failure)),
-      (products) => emit(ProductsLoaded(products: products)),
+      (failure) {
+        print('ProductsBloc: LoadProducts failed: $failure');
+        emit(ProductsError(failure: failure));
+      },
+      (products) {
+        print('ProductsBloc: LoadProducts succeeded with ${products.length} products');
+        emit(ProductsLoaded(products: products));
+      },
     );
   }
 
@@ -61,7 +66,7 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
     LoadProductEvent event,
     Emitter<ProductsState> emit,
   ) async {
-    emit(const ProductLoading(isFirstLoad: true));
+    emit(const ProductLoading());
 
     final result = await _getProductUseCase(event.productId);
 
@@ -152,7 +157,7 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
     LoadProductsByCategoryEvent event,
     Emitter<ProductsState> emit,
   ) async {
-    emit(const ProductsLoading(isFirstLoad: true));
+    emit(const ProductsLoading());
 
     final result = await _getProductsByCategoryUseCase(event.category);
 

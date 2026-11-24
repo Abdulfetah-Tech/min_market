@@ -2,8 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
+import '../../../../core/core.dart';
 import '../../domain/entities/cart.dart';
-import 'package:min_market/core/core.dart';
 
 abstract class CartState extends Equatable {
   const CartState();
@@ -17,9 +17,9 @@ class CartInitial extends CartState {}
 class CartLoading extends CartState {}
 
 class CartLoaded extends CartState {
-  final Cart cart;
 
   const CartLoaded(this.cart);
+  final Cart cart;
 
   int get itemCount => cart.itemCount;
   double get total => cart.total;
@@ -31,22 +31,22 @@ class CartLoaded extends CartState {
 }
 
 class CartError extends CartState {
-  final Failure failure;
-  final Cart? cachedCart;
 
   const CartError({
     required this.failure,
     this.cachedCart,
   });
+  final Failure failure;
+  final Cart? cachedCart;
 
   @override
   List<Object?> get props => [failure, cachedCart];
 }
 
 class CartActionLoading extends CartState {
-  final String productId;
 
   const CartActionLoading(this.productId);
+  final String productId;
 
   @override
   List<Object?> get props => [productId];

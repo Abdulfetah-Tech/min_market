@@ -8,8 +8,7 @@ import 'app_button.dart';
 /// Generic error state with retry action
 class ErrorState extends StatelessWidget {
   const ErrorState({
-    super.key,
-    required this.message,
+    required this.message, super.key,
     this.title = 'Something went wrong',
     this.icon,
     this.onRetry,
@@ -71,7 +70,6 @@ class ErrorState extends StatelessWidget {
               const SizedBox(height: 24),
               AppButton(
                 onPressed: onRetry,
-                variant: AppButtonVariant.primary,
                 child: Text(retryLabel),
               ),
             ],
@@ -85,8 +83,7 @@ class ErrorState extends StatelessWidget {
 /// Empty state with illustration
 class EmptyState extends StatelessWidget {
   const EmptyState({
-    super.key,
-    required this.message,
+    required this.message, super.key,
     this.title = 'Nothing here yet',
     this.icon,
     this.actionLabel,
@@ -148,7 +145,6 @@ class EmptyState extends StatelessWidget {
               const SizedBox(height: 24),
               AppButton(
                 onPressed: onAction,
-                variant: AppButtonVariant.primary,
                 child: Text(actionLabel!),
               ),
             ],
@@ -275,8 +271,7 @@ class OfflineState extends StatelessWidget {
 /// Success state widget
 class SuccessState extends StatelessWidget {
   const SuccessState({
-    super.key,
-    required this.message,
+    required this.message, super.key,
     this.title = 'Success!',
     this.onContinue,
     this.continueLabel = 'Continue',
@@ -336,7 +331,6 @@ class SuccessState extends StatelessWidget {
               const SizedBox(height: 24),
               AppButton(
                 onPressed: onContinue,
-                variant: AppButtonVariant.primary,
                 child: Text(continueLabel),
               ),
             ],

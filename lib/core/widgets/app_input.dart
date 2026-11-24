@@ -171,8 +171,7 @@ class _AppTextFieldState extends State<AppTextField> {
 /// Dropdown field with consistent styling
 class AppDropdownField<T> extends StatelessWidget {
   const AppDropdownField({
-    super.key,
-    required this.items,
+    required this.items, super.key,
     this.value,
     this.label,
     this.hint,
